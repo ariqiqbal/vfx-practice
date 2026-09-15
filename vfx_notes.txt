@@ -1,1 +1,1 @@
-Hello, my name is Ariq. I am 21 years old. This is my practice zone using git hub.
+Fire color: orange
