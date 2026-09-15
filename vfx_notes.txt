@@ -1,1 +1,3 @@
 Fire color: orange
+Fire color: blue
+Fire color : orange-red(combine the two branches decided)
