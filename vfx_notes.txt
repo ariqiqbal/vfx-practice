@@ -1,0 +1,2 @@
+Fire VFX notes: emission rate, color ramp, lifetime 
+Hello, my name is Ariq
