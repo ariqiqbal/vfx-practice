@@ -486,15 +486,3 @@ Merge
 main
 ```
 
-That is much clearer for your lecturer.
-
-### Also, your feature list
-
-I would **not call "game over – all enemy collapsed after all 3 lives habis" a VFX requirement by itself**. Separate the **game logic** from the **visual effect**:
-
-> **Game logic:** Player loses all 3 lives → Game Over state is triggered.  
-> **VFX:** Player destruction animation → enemy collapse/explosion effect → transition to Game Over screen.
-
-That makes your VFX team's responsibility much clearer and prevents your team from accidentally taking responsibility for the entire game-over logic.
-
-And because your team wants to **practice repository/Git**, the branch → PR → leader review → merge process is useful even though Trunk-Based Development emphasizes frequent integration.
