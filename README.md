@@ -1,14 +1,3 @@
-Yes — now I understand what your **actual team has agreed on**. The important thing is that we shouldn't write a generic Trunk-Based Development document that changes your team's plan.
-
-Your team's idea is basically:
-
-> **8 members → each member gets an assigned VFX feature → each member works on their own branch → when their feature is ready, they queue/push it to the team repository → leader reviews/integrates it into `main`.**
-
-One thing I would improve is the wording **"each person makes one function only."** For the assignment, it's better to say **each commit should contain one logical change/function**, rather than limiting each person to only one function for the entire project.
-
-Also, your features can be made more specific so that all 8 members have reasonably clear work.
-
-Here's a version that follows **your team's actual idea** and the lecturer's six requirements.
 
 ---
 
