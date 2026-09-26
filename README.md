@@ -1,488 +1,242 @@
-
----
-
-# Git Workflow – Effection Team
+# Git Workflow Plan — Team Effection
 
 ## 1. Selected Git Workflow and Rationale
 
-### Selected Git Workflow
+### Selected Workflow: Trunk-Based Development
 
-Our team will use **Trunk-Based Development** for the Space Invaders Visual Effects project.
+Our team will use **Trunk-Based Development (TBD)** with short-lived feature branches and Pull Requests (PRs).
 
-Our team consists of **8 members**, with each member assigned to specific Visual Effects (VFX) features. Each member will work on their assigned feature using a separate short-lived branch.
+The `main` branch is the only long-lived branch. Team members create short-lived branches for individual tasks, complete their work, and integrate it into `main` through a PR.
 
-The team will use the `main` branch as the main trunk of the project. Completed features will be integrated into `main` after testing and review.
+### Why We Chose This Workflow
 
-### Rationale
+This workflow is suitable for our Visual Effects (VFX) project because:
 
-We selected Trunk-Based Development because each team member has their own assigned feature to develop. Members can first develop and test their own features separately without affecting the stable version of the project.
+* Our team has multiple members working on the same VFX system.
+* Several files may be shared with other teams, so frequent integration helps reduce merge conflicts.
+* Small and frequent changes make problems easier to identify and fix.
+* Other teams can access completed VFX features without waiting for a long development cycle.
+* PRs provide a review process before changes are added to `main`.
 
-If a feature does not work correctly, the changes can be modified or reverted before being integrated into the main project.
-
-This workflow also allows our team to:
-
-- Develop different VFX features in parallel.
-- Practice using Git branches and repositories.
-- Keep the `main` branch as the main integrated version of the project.
-- Test individual features before integration.
-- Reduce the risk of unfinished code affecting the main project.
-- Frequently integrate completed features into the project.
+Our goal is to keep `main` stable and playable while integrating completed work regularly.
 
 ---
 
-# 2. Branch Strategy
+## 2. Branch Strategy
 
-Our team will use the following branch structure:
+We will use the following branches naming convention:
 
-| Branch | Purpose |
-|---|---|
-| `main` | Main trunk containing the integrated and tested project |
-| `feature/<feature-name>` | Individual member's branch for developing an assigned VFX feature |
+| Branch                  | Purpose                                                     |
+| ----------------------- | ----------------------------------------------------------- |
+| `main`                  | Main integration branch containing stable and playable code |
+| `feature/<description>` | New VFX features or improvements                            |
+| `fix/<description>`     | Bug fixes                                                   |
+| `docs/<description>`    | Documentation changes                                       |
 
-### `main`
+### Branch Rules
 
-The `main` branch is the main trunk of our project.
+1. Create a branch from the latest `main`.
+2. Each branch should focus on **one task or feature**.
+3. Keep branches short-lived and merge them as soon as the task is completed and reviewed.
+4. Do not create long-lived personal or phase branches.
+5. After a branch is successfully merged, delete it.
+6. Keep `main` stable and playable at all times.
 
-It should contain the latest integrated version of the game that has been reviewed and tested.
-
-Members should **not directly push unfinished work to `main`**.
-
-### Feature Branches
-
-Each team member will create a branch for their assigned feature.
-
-For example:
+### Examples
 
 ```text
-feature/bullet-enemy-impact
-feature/barrier-impact
-feature/player-damage
-feature/life-glitch
-feature/game-over
+feature/enemy-explosion
+feature/player-bullet-trail
+fix/particle-leak
+docs/vfx-events
 ```
-
-Each feature branch should focus on one specific VFX feature.
-
-### When Branches Are Created
-
-A feature branch is created when a team member starts working on a new assigned feature.
-
-Example:
-
-```bash
-git checkout main
-git pull origin main
-git checkout -b feature/player-damage
-```
-
-### When Branches Are Merged
-
-A feature branch can be merged into `main` when:
-
-1. The assigned feature is completed.
-2. The feature has been tested.
-3. The feature does not break existing gameplay.
-4. The changes have been reviewed.
-5. Any merge conflicts have been resolved.
-
-### When Branches Are Deleted
-
-After the feature branch has been successfully merged into `main` and is no longer needed, the branch should be deleted.
-
-This keeps the repository clean and prevents old branches from accumulating.
 
 ---
 
-# 3. Commit Rules
+## 3. Commit Rules
 
-Each commit should contain **one logical change or function**.
+### Commit Guidelines
 
-Since each member is responsible for a specific feature, commits should be focused rather than combining many unrelated changes into one commit.
+Each commit should contain **one logical change**.
 
-For example, for a player damage feature:
+A commit should:
 
-```text
-Commit 1: Add player damage visual effect
-Commit 2: Add life reduction glitch effect
-Commit 3: Connect damage effect to player hit event
-```
-
-Avoid commits such as:
-
-```text
-Update everything
-Finish VFX
-Changes
-Final
-```
+* Be related to the current task.
+* Compile successfully whenever possible.
+* Not contain unrelated changes.
+* Not include debug code, temporary files, or generated files.
+* Keep the game playable whenever possible.
+* Avoid mixing multiple features, bug fixes, or documentation changes in one commit.
 
 ### Commit Message Format
 
-Our team will use:
+We will use the following format:
 
 ```text
-[FEATURE] Short description
+<type>(<scope>): <short description>
 ```
 
-Examples:
+Common types:
+
+| Type       | Usage                   |
+| ---------- | ----------------------- |
+| `feat`     | New feature             |
+| `fix`      | Bug fix                 |
+| `docs`     | Documentation           |
+| `refactor` | Code restructuring      |
+| `perf`     | Performance improvement |
+| `chore`    | Maintenance             |
+| `revert`   | Revert previous commit  |
+
+**Scope** shows which part of the project the commit affects.
+It is written in lowercase inside parentheses, right after the type.
+
+| Scope       | Area                              |
+| ----------- | --------------------------------- |
+| `particles` | Particle system and particle pool |
+| `explosion` | Explosion effects                 |
+| `trail`     | Bullet and movement trails        |
+| `events`    | VFX event system                  |
+
+Example: `feat(explosion): add enemy explosion effect`
+means a new feature was added to the explosion effects.
+
+### Examples
 
 ```text
-[BULLET] Add enemy hit effect
-[BARRIER] Add barrier impact particles
-[PLAYER] Add player damage effect
-[LIFE] Add life reduction glitch
-[GAMEOVER] Add enemy collapse effect
+feat(explosion): add enemy explosion effect
+fix(particles): fix particle cleanup
+docs(events): update effect event documentation
+perf(trail): reduce bullet trail particles
 ```
 
-The commit message should clearly describe the change made in that commit.
+Commit messages should be short, clear, and describe **what was changed**.
 
-### Commit Rule
+Before commiting, developers should check theri changes with : 
 
-Team members should commit their work **frequently and logically** rather than putting all changes into one large commit at the end.
-
-Each commit should represent a meaningful change that can be understood by other team members.
-
+* git status 
+* git diff
 ---
 
-# 4. Pull Request and Code Review Rules
+## 4. Pull Request and Code Review Rules
 
-## Pull Request
+### Pull Requests
 
-A Pull Request should be opened when a member has completed and tested their assigned feature and the feature is ready to be integrated into `main`.
+A PR should be opened when the task is implemented and ready for review.
 
-The Pull Request should include:
+Before opening a PR, the developer must:
 
-- Feature name.
-- Description of the changes.
-- Testing performed.
-- Any known issues.
-- Screenshots or a short video/GIF when appropriate for VFX.
-
-Example:
-
-```text
-Feature branch:
-feature/player-damage
-
-        ↓ Pull Request
-
-Team repository:
-main
-```
+1. Pull/rebase the latest `main`.
+2. Compile the project.
+3. Run the game and test the changes.
+4. Check that existing functionality is not broken.
+5. Clearly describe the changes and how they were tested.
 
 ### Code Review
 
-Before merging, the team leader or assigned reviewer should check:
-
-- Whether the feature matches the requirement.
-- Whether the VFX works correctly.
-- Whether the feature affects existing gameplay.
-- Whether the code is understandable.
-- Whether the feature has been tested.
-- Whether unnecessary changes are included.
-
-If problems are found, the member should fix them on their branch and update the Pull Request.
-
-### Approval
-
-A Pull Request must receive **at least one review/approval from the team leader or assigned reviewer** before being merged into `main`.
+* Every functional PR must receive **at least one approval** from another team member.
+* The author cannot approve their own PR.
+* Changes to important shared files should receive a second review when necessary.
+* Reviewers should check correctness, readability, possible conflicts, and whether the task requirements are satisfied.
+* Requested changes must be completed before merging.
 
 ### Direct Push to `main`
 
-**Direct pushes to `main are not allowed for normal feature development.**
+**Direct pushes to `main` are not allowed for normal development.**
 
-All completed features should go through the team's review/integration process.
+All feature and bug-fix changes must go through a PR and code review.
 
-This ensures that the team leader can control what enters the main project.
-
----
-
-# 5. Merge Strategy
-
-Our team will primarily use **Merge** to integrate completed feature branches into `main`.
-
-### Merge
-
-A feature branch will be merged after:
-
-```text
-Feature completed
-       ↓
-Feature tested
-       ↓
-Pull Request
-       ↓
-Code review
-       ↓
-Approved
-       ↓
-Merge into main
-```
-
-### Squash
-
-Our team may use **Squash Merge** when a feature branch contains many small temporary commits, such as:
-
-```text
-fix
-fix again
-test
-change
-fix bug
-```
-
-These commits can be combined into one meaningful commit before entering `main`.
-
-### Rebase
-
-Rebase is not our primary merge strategy.
-
-It may be used by a team member to update their own feature branch with the latest `main` before merging.
-
-Team members should avoid rebasing a branch that is already being actively shared by other members.
+Only urgent administrative actions, such as restoring a broken `main`, may be handled directly by the responsible team member.
 
 ---
 
-## Merge Conflict Resolution
+## 5. Merge Strategy
 
-If a merge conflict occurs, the **member responsible for the feature branch** will be responsible for resolving the conflict.
+### Strategy
 
-The member should:
+Our team will mainly use **Rebase and Fast-Forward** for feature and fix branches.
 
-1. Identify the conflicting changes.
-2. Discuss with the other member if the conflict involves their code.
-3. Resolve the conflict.
-4. Test the project after resolving it.
-5. Update the Pull Request if necessary.
-6. Ask the reviewer to check the changes again.
+```text
+feature branch
+      │
+      │ rebase onto main
+      ▼
+    main ◄── fast-forward
+```
 
-For conflicts involving important shared code, the team leader will help decide which implementation should be kept.
+### Why Rebase and Fast-Forward?
+
+* Keeps the history simple and linear.
+* Makes individual changes easier to understand.
+* Reduces unnecessary merge commits.
+* Makes it easier to identify and revert problematic changes.
+
+### Merge Commit
+
+A normal **merge commit** will only be used when necessary, such as synchronizing changes from the upstream repository where preserving the upstream history is important.
+
+### Conflict Resolution
+
+If a conflict occurs:
+
+1. The **branch author** should resolve the conflict first because they understand their changes best.
+2. The latest `main` should be incorporated into the branch before merging.
+3. The affected code should be reviewed carefully, especially shared files.
+4. The project must be compiled and tested again after resolving the conflict.
+5. If the conflict involves another team's work, the affected members should discuss and agree on the correct solution.
 
 ---
 
-# 6. Overall Development Workflow
+## 6. Overall Development Workflow
 
-Our team's development process is:
+The complete development process is:
 
-### Step 1 — Assign Features
-
-The 8 team members are assigned different VFX features.
-
-Our planned VFX features include:
-
-| Member | Feature |
-|---|---|
-| Member 1 | Bullet hits enemy |
-| Member 2 | Bullet hits barrier |
-| Member 3 | Player attacked by enemy |
-| Member 4 | Player life reduction / glitch effect |
-| Member 5 | Player destruction effect |
-| Member 6 | Game Over enemy collapse effect |
-| Member 7 | Environmental effects |
-| Member 8 | VFX integration, cleanup and testing |
-
-These assignments can be adjusted by the team depending on implementation difficulty.
-
-### Step 2 — Update `main`
-
-Before starting work, the member gets the latest version of the project:
-
-```bash
-git checkout main
-git pull origin main
+```mermaid
+flowchart TD
+    A[Choose Task] --> B[Create Branch from main]
+    B --> C[Implement Changes]
+    C --> D[Commit Changes]
+    D --> E[Pull/Rebase Latest main]
+    E --> F[Test and Compile]
+    F --> G[Open Pull Request]
+    G --> H[Code Review]
+    H --> I{Approved?}
+    I -- No --> C
+    I -- Yes --> J[Rebase and Merge into main]
+    J --> K[Delete Branch]
+    K --> L[Main remains stable]
 ```
 
-### Step 3 — Create Feature Branch
+### Step-by-Step Process
 
-The member creates a branch for their assigned feature:
+1. **Choose a task**
+   Select a feature, bug fix, or documentation task.
 
-```bash
-git checkout -b feature/player-damage
-```
+2. **Create a branch**
+   Create a short-lived branch from the latest `main`.
 
-### Step 4 — Develop the Feature
+3. **Develop**
+   Implement the task and make small, logical commits.
 
-The member implements the assigned VFX feature.
+4. **Update the branch**
+   Rebase with the latest `main` to reduce possible conflicts.
 
-For example:
+5. **Test**
+   Compile and run the game to verify that the changes work correctly.
 
-```text
-Player attacked
-      ↓
-Damage detected
-      ↓
-Player flash/glitch effect
-      ↓
-Life decreases
-```
+6. **Open a Pull Request**
+   Describe the changes and provide testing information.
 
-### Step 5 — Commit Changes
+7. **Code Review**
+   Another team member reviews the PR and requests changes if necessary.
 
-The member makes small, meaningful commits:
+8. **Merge**
+   Once approved, rebase and fast-forward the branch into `main`.
 
-```bash
-git add .
-git commit -m "[PLAYER] Add player damage effect"
-```
+9. **Delete the branch**
+   Remove the completed branch to keep the repository clean.
 
-### Step 6 — Test
-
-The member tests the feature in the game.
-
-The member should check:
-
-- Does the VFX trigger at the correct time?
-- Does it appear at the correct location?
-- Does it disappear correctly?
-- Does the game continue working?
-- Does it interfere with other VFX?
-
-### Step 7 — Push the Branch
-
-When the feature is ready:
-
-```bash
-git push origin feature/player-damage
-```
-
-### Step 8 — Queue for Integration
-
-The completed feature is placed in the team's integration queue.
-
-The team leader/reviewer checks the Pull Request and reviews the feature.
-
-### Step 9 — Review
-
-If changes are required:
-
-```text
-Review
-  ↓
-Changes requested
-  ↓
-Developer fixes feature
-  ↓
-Push changes
-  ↓
-Review again
-```
-
-If approved:
-
-```text
-Approved
-   ↓
-Merge
-```
-
-### Step 10 — Integrate into `main`
-
-The team leader merges the approved feature into `main`.
-
-### Step 11 — Delete the Branch
-
-After successful integration, the feature branch can be deleted if it is no longer needed.
-
-### Step 12 — Next Feature
-
-The team member updates their local `main` and starts their next assigned task.
+10. **Continue development**
+    The next task starts from the updated `main`.
 
 ---
-
-# Overall Development Flow
-
-```text
-                  ┌─────────────────────┐
-                  │   Assign Feature    │
-                  └──────────┬──────────┘
-                             ↓
-                  ┌─────────────────────┐
-                  │ Update latest main  │
-                  └──────────┬──────────┘
-                             ↓
-                  ┌─────────────────────┐
-                  │ Create Feature      │
-                  │ Branch              │
-                  └──────────┬──────────┘
-                             ↓
-                  ┌─────────────────────┐
-                  │ Develop VFX Feature │
-                  └──────────┬──────────┘
-                             ↓
-                  ┌─────────────────────┐
-                  │ Small Meaningful    │
-                  │ Commits             │
-                  └──────────┬──────────┘
-                             ↓
-                  ┌─────────────────────┐
-                  │ Test Feature        │
-                  └──────────┬──────────┘
-                             ↓
-                  ┌─────────────────────┐
-                  │ Push Feature Branch │
-                  └──────────┬──────────┘
-                             ↓
-                  ┌─────────────────────┐
-                  │ Pull Request /      │
-                  │ Integration Queue   │
-                  └──────────┬──────────┘
-                             ↓
-                  ┌─────────────────────┐
-                  │ Code Review         │
-                  └──────────┬──────────┘
-                             ↓
-                       ┌─────┴─────┐
-                       │           │
-                    Changes?     Approved
-                       │           │
-                       ↓           ↓
-                  Fix Changes   Merge to
-                       │          main
-                       │           │
-                       └─────┐     │
-                             ↓     ↓
-                           Review
-                             │
-                             ↓
-                    ┌─────────────────┐
-                    │ Delete Feature  │
-                    │ Branch          │
-                    └────────┬────────┘
-                             ↓
-                    ┌─────────────────┐
-                    │   Next Feature  │
-                    └─────────────────┘
-```
-
----
-
-## One thing I would change in your team's original idea
-
-You said:
-
-> "after done, push dekat team repo, then nanti leader yg akan push dekat main repo"
-
-I'd change this slightly because **"push to team repo" and "push to main" can be confusing**.
-
-Use this terminology in the document:
-
-> **Each member develops their assigned feature on their own feature branch. After completing and testing the feature, they push the branch to the team repository and open a Pull Request to `main`. The team leader reviews the Pull Request and merges the approved changes into `main`.**
-
-So the flow becomes:
-
-```text
-Member's branch
-      ↓
-Push branch
-      ↓
-Team repository
-      ↓
-Pull Request
-      ↓
-Leader review
-      ↓
-Merge
-      ↓
-main
-```
-
